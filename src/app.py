@@ -1,7 +1,7 @@
 import streamlit as st
-from anyra_dashboard.modules.utils.session import init_session
-from anyra_dashboard.modules.utils.scheduler import start_scheduler
-from anyra_dashboard.modules.utils.branding import show_branding
+from utils.session import init_session
+from utils.scheduler import start_scheduler
+from utils.branding import show_branding
 
 def main():
     init_session()
@@ -50,6 +50,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
