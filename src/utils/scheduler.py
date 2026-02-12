@@ -14,10 +14,10 @@ def start_scheduler():
     global scheduler
     if scheduler is None:
         scheduler = BackgroundScheduler()
-        scheduler.start()
         scheduler.add_job(check_trials, "interval", hours=24)
         scheduler.add_job(daily_report_generation, "interval", hours=24)
         scheduler.add_job(scheduled_cleanup, "interval", hours=24)
         scheduler.start()
+
 
 
