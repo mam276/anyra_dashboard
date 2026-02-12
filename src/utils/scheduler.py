@@ -10,15 +10,14 @@ def scheduled_cleanup(retention_days=30):
     delete_expired_files(retention_days=retention_days)
 
 def start_scheduler():
-    # Create scheduler only once per session
     if "scheduler" not in st.session_state:
-        st.session_state.scheduler = BackgroundScheduler()
-        st.session_state.scheduler.add_job(check_trials, "interval", hours=24)
-        st.session_state.scheduler.add_job(daily_report_generation, "interval", hours=24)
-        st.session_state.scheduler.add_job(scheduled_cleanup, "interval", hours=24)
-        st.session_state.scheduler.start()
-
+        scheduler = BackgroundScheduler()
+        scheduler.add_job(check_trials, "interval", hours=24)
+        scheduler.add_job(daily_report_generation, "interval", hours=24)
+        scheduler.add_job(scheduled_cleanup, "interval", hours=24)
+        scheduler.start()
         st.session_state.scheduler = scheduler
+
 
 
 
