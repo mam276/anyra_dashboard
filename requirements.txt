@@ -1,0 +1,11 @@
+streamlit
+sqlalchemy
+bcrypt
+pandas
+plotly
+fpdf
+apscheduler
+scikit-learn
+joblib
+qrcode
+pillow
