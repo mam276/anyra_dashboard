@@ -18,6 +18,9 @@ def start_scheduler():
         st.session_state.scheduler.add_job(scheduled_cleanup, "interval", hours=24)
         st.session_state.scheduler.start()
 
+        st.session_state.scheduler = scheduler
+
+
 
 
 
