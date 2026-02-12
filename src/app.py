@@ -11,7 +11,7 @@ def main():
         start_scheduler()
         st.session_state["scheduler_started"] = True
 
-    menu = st.sidebar.radio("Navigation", [
+        menu = st.sidebar.radio("Navigation", [
         "Auth", "Data", "Analytics", "Visualization", "Insights",
         "Reports", "Payments", "Admin", "Inventory", "Copilot"
     ])
@@ -50,6 +50,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
