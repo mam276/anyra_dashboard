@@ -8,8 +8,8 @@ def main():
     show_branding()
     
     if "scheduler_started" not in st.session_state:
-    start_scheduler()
-    st.session_state["scheduler_started"] = True
+        start_scheduler()
+        st.session_state["scheduler_started"] = True
 
     menu = st.sidebar.radio("Navigation", [
         "Auth", "Data", "Analytics", "Visualization", "Insights",
@@ -50,5 +50,6 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
