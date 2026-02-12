@@ -3,9 +3,6 @@ from utils.session import init_session
 from utils.scheduler import start_scheduler
 from utils.branding import show_branding
 
- if "scheduler_started" not in st.session_state:
-        start_scheduler()
-
 def main():
     init_session()
     show_branding()
@@ -48,6 +45,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
