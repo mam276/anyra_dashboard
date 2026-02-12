@@ -1,6 +1,6 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from anyra_dashboard.modules.utils.subscription import check_trials
-from anyra_dashboard.modules.utils.file_manager import delete_expired_files
+from utils.subscription import check_trials
+from utils.file_manager import delete_expired_files
 
     scheduler = BackgroundScheduler()
 
@@ -16,6 +16,7 @@ def start_scheduler():
         scheduler.add_job(daily_report_generation, "interval", hours=24)
         scheduler.add_job(scheduled_cleanup, "interval", hours=24)
         scheduler.start()
+
 
 
 
