@@ -1,9 +1,15 @@
 import streamlit as st
+from anyra_dashboard.utils.scheduler import start_scheduler
+
 from utils.session import init_session
 from utils.scheduler import start_scheduler
 from utils.branding import show_branding
 
 def main():
+    if "scheduler_started" not in st.session_state:
+        start_scheduler()
+        st.session_state["scheduler_started"] = True
+
     init_session()
     start_scheduler()
     show_branding()
@@ -45,4 +51,5 @@ def main():
         views.show_copilot()
 
 if __name__ == "__main__":
+
     main()
