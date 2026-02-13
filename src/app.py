@@ -33,11 +33,14 @@ def main():
         token = params["token"][0]
         auth_views.show_reset_form(token)
         return
+        
     #--------Authentication Gate -----------------
-    # Run login/authentication first
-
     if st.session_state.get("user") is None:
-        # Show login/signup screen
+        # Show welcome screen first
+        st.title("Welcome to Anyra Dashboard 👋")
+        st.write("Please sign up or log in to continue.")
+
+        # Only then show login/signup form
         auth_views.login_user()
         return  # stop here until user logs in
 
@@ -120,6 +123,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
