@@ -1,7 +1,5 @@
-# src/modules/auth/views.py
-
 import streamlit as st
-from utils.session import login_user, signup_user, current_user
+from utils.session import login_user as do_login, signup_user, current_user
 
 def login_user():
     """
@@ -14,7 +12,7 @@ def login_user():
     email = st.sidebar.text_input("Email")
     password = st.sidebar.text_input("Password", type="password")
     if st.sidebar.button("Login"):
-        user = login_user(email, password)
+        user = do_login(email, password)
         if user:
             st.session_state["user"] = user
             st.success("Logged in successfully.")
@@ -31,7 +29,7 @@ def show_auth():
         email = st.text_input("Email")
         password = st.text_input("Password", type="password")
         if st.button("Login"):
-            user = login_user(email, password)
+            user = do_login(email, password)
             if user:
                 st.session_state["user"] = user
                 st.success("Logged in successfully.")
@@ -45,13 +43,4 @@ def show_auth():
             user = signup_user(name, email, password)
             if user:
                 st.session_state["user"] = user
-                st.success("Signup successful. Please login.")
-    else:
-        name = st.text_input("Name")
-        email = st.text_input("Email")
-        password = st.text_input("Password", type="password")
-        if st.button("Signup"):
-            user = signup_user(name, email, password)
-            if user:
-
                 st.success("Signup successful. Please login.")
