@@ -1,5 +1,3 @@
-# src/app.py
-
 import streamlit as st
 from utils.session import init_session
 from utils.scheduler import start_scheduler
@@ -81,6 +79,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
