@@ -70,3 +70,56 @@ def show_rotating_tips():
             st.session_state["tip_shown"] = True
             tip = random.choice(tips)
             st.info(tip)
+
+def start_guided_tour():
+    """
+    Step-by-step guided tour for new users.
+    """
+    role = st.session_state.get("role", "guest")
+    subscription = st.session_state.get("subscription_level", "free")
+
+    # Only show for guest/free users
+    if role in ["admin", "premium"]:
+        return
+
+    if "tour_completed" in st.session_state:
+        return
+
+    if "tour_step" not in st.session_state:
+        st.session_state["tour_step"] = 0
+
+    steps = [
+        "📂 Use the sidebar to navigate between modules like Analytics, CRM, and Payments.",
+        "📤 Upload your CSV or Excel files to start exploring your data.",
+        "📊 Generate charts and dashboards instantly from your uploaded data.",
+        "📑 Export insights and share reports with your team.",
+        "🚀 Upgrade to premium for executive dashboards, predictive analytics, and advanced features."
+    ]
+
+    step = st.session_state["tour_step"]
+
+    st.markdown(
+        f"""
+        <div style="
+            background-color:#e6f7ff;
+            padding:20px;
+            border-radius:10px;
+            font-size:16px;">
+            {steps[step]}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    col1, col2 = st.columns([1,1])
+    with col1:
+        if st.button("Next"):
+            if step + 1 < len(steps):
+                st.session_state["tour_step"] += 1
+            else:
+                st.session_state["tour_completed"] = True
+                st.session_state.pop("tour_step")
+    with col2:
+        if st.button("Skip Tour"):
+            st.session_state["tour_completed"] = True
+            st.session_state.pop("tour_step")
