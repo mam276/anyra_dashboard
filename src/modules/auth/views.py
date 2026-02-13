@@ -1,5 +1,5 @@
 import streamlit as st
-from utils.session import login_user as do_login, signup_user, current_user, forgot_password, reset_password
+from utils.session import (login_user as do_login, signup_user, current_user, forgot_password, reset_password)
 
 def login_user():
     """
@@ -63,5 +63,6 @@ def show_forgot_password():
             st.success("Password reset successful. Please login.")
         else:
             st.error("Failed to reset password.")
+
 
 
