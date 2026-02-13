@@ -18,7 +18,7 @@ def main():
     onboarding_views.show_welcome_popup()
     onboarding_views.show_rotating_tips()
     onboarding_views.start_guided_tour()
-   
+
     # Check query params for reset route
     try:
         params = st.query_params
@@ -29,20 +29,30 @@ def main():
         token = params["token"][0]
         auth_views.show_reset_form(token)
         return
-        
-    #--------Authentication Gate -----------------
-    
+
+    # -------- Authentication Gate -----------------
     if st.session_state.get("user") is None:
-        # Show welcome screen first
-        st.title("Welcome to Anyra Dashboard 👋")
-        st.write("Explore insights tailored to your data — sign up or log in to continue.")
+        # Initialize welcome flag
+        if "show_welcome" not in st.session_state:
+            st.session_state["show_welcome"] = True
+
+        if st.session_state["show_welcome"]:
+            # Show welcome screen first
+            st.title("Welcome to Anyra Dashboard 👋")
+            st.write("Explore insights tailored to your data — sign up or log in to continue.")
+
+            if st.button("Continue"):
+                st.session_state["show_welcome"] = False
+                st.experimental_rerun()
+            return
 
         # Unified login/signup screen (tabs)
         auth_views.show_auth()
         return  # stop here until user logs in
 
-    # Sidebar navigation
-    menu = st.sidebar.radio(
+        # Sidebar navigation
+        
+        menu = st.sidebar.radio(
         "Navigation",
         [
             "Auth", "Data", "Analytics", "Visualization", "Insights",
@@ -120,6 +130,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
