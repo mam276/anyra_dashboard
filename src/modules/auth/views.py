@@ -1,5 +1,13 @@
+# src/modules/auth/views.py
+
 import streamlit as st
-from utils.session import (login_user as do_login, signup_user, current_user, forgot_password, reset_password)
+from utils.session import (
+    login_user as do_login,
+    signup_user,
+    current_user,
+    forgot_password,
+    reset_password
+)
 
 def login_user():
     """
@@ -12,9 +20,8 @@ def login_user():
     email = st.sidebar.text_input("Email")
     password = st.sidebar.text_input("Password", type="password")
     if st.sidebar.button("Login"):
-        user = do_login(email, password)
-        if user:
-            st.session_state["user"] = user
+        if do_login(email, password):
+            st.session_state["authenticated"] = True
             st.success("Logged in successfully.")
         else:
             st.error("Invalid credentials.")
@@ -29,21 +36,19 @@ def show_auth():
         email = st.text_input("Email")
         password = st.text_input("Password", type="password")
         if st.button("Login"):
-            user = do_login(email, password)
-            if user:
-                st.session_state["user"] = user
+            if do_login(email, password):
+                st.session_state["authenticated"] = True
                 st.success("Logged in successfully.")
             else:
                 st.error("Invalid credentials.")
     else:
-        name = st.text_input("Name")
         email = st.text_input("Email")
         password = st.text_input("Password", type="password")
         if st.button("Signup"):
-            user = signup_user(name, email, password)
-            if user:
-                st.session_state["user"] = user
+            if signup_user(email, password):
                 st.success("Signup successful. Please login.")
+            else:
+                st.error("Email already exists.")
 
 def show_forgot_password():
     """
@@ -53,13 +58,18 @@ def show_forgot_password():
     email = st.text_input("Enter your registered email")
     if st.button("Send Reset Link"):
         if forgot_password(email):
-            st.success("Password reset link sent to your email (demo).")
+            st.success("Password reset link sent to your email.")
         else:
             st.error("Email not found.")
 
+def show_reset_form(token: str):
+    """
+    UI for resetting password via token link.
+    """
+    st.subheader("Reset Your Password")
     new_password = st.text_input("Enter new password", type="password")
     if st.button("Reset Password"):
-        if reset_password(email, new_password):
+        if reset_password(token, new_password):
             st.success("Password reset successful. Please login.")
         else:
-            st.error("Failed to reset password.")
+            st.error("Invalid or expired reset link.")
