@@ -14,13 +14,9 @@ def main():
     start_scheduler()
     show_branding()
 
-    # Show Welcome popup
+    # Show onboarding flows
     onboarding_views.show_welcome_popup()
-
-    # Show rotating tip for free users
     onboarding_views.show_rotating_tips()
-
-    # Start guided tour for new users
     onboarding_views.start_guided_tour()
    
     # Check query params for reset route
@@ -35,16 +31,14 @@ def main():
         return
         
     #--------Authentication Gate -----------------
+    
     if st.session_state.get("user") is None:
         # Show welcome screen first
         st.title("Welcome to Anyra Dashboard 👋")
         st.write("Explore insights tailored to your data — sign up or log in to continue.")
 
-        # Only show login form if user clicks
-        if st.button("Log In"):
-            auth_views.login_user()
-        if st.button("Sign Up"):
-            auth_views.signup_user()  # assuming you have this wired
+        # Unified login/signup screen
+        auth_views.show_auth()
         return  # stop here until user logs in
 
     # Sidebar navigation
@@ -126,6 +120,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
