@@ -23,7 +23,7 @@ def signup_user(email: str, password: str, role: str = "user", subscription_leve
         "role": role,
         "subscription_level": subscription_level
     }
-    log_action(email, "signup")
+    log_event(email, "signup")
     return True
 
 def login_user(email: str, password: str):
@@ -35,9 +35,9 @@ def login_user(email: str, password: str):
         st.session_state["user"] = email
         st.session_state["role"] = user.get("role", "user")
         st.session_state["subscription_level"] = user.get("subscription_level", "free")
-        log_action(email, "login")
+        log_event(email, "login")
         return True
-    log_action(email, "failed_login")
+    log_event(email, "failed_login")
     return False
 
 def current_user():
@@ -73,7 +73,7 @@ def forgot_password(email: str):
         token = secrets.token_urlsafe(16)
         RESET_TOKENS[token] = {"email": email, "expires": time.time() + 900}  # 15 min expiry
         send_reset_email(email, token)
-        log_action(email, "forgot_password_request")
+        log_event(email, "forgot_password_request")
         return True
     return False
 
@@ -96,7 +96,7 @@ def reset_password(token: str, new_password: str):
         hashed = bcrypt.hashpw(new_password.encode("utf-8"), bcrypt.gensalt())
         USERS[email]["password"] = hashed
         del RESET_TOKENS[token]  # invalidate token
-        log_action(email, "password_reset")
+        log_event(email, "password_reset")
         return True
     return False
 
@@ -111,7 +111,7 @@ def enforce_role(required_role: str):
     """
     role = st.session_state.get("role", "user")
     if role != required_role:
-        log_action(st.session_state.get("user", "anonymous"), f"role_denied:{required_role}")
+        log_event(st.session_state.get("user", "anonymous"), f"role_denied:{required_role}")
     return role == required_role
 
 def enforce_subscription(required_level: str):
@@ -121,7 +121,7 @@ def enforce_subscription(required_level: str):
     """
     level = st.session_state.get("subscription_level", "free")
     if level != required_level:
-        log_action(st.session_state.get("user", "anonymous"), f"subscription_denied:{required_level}")
+        log_event(st.session_state.get("user", "anonymous"), f"subscription_denied:{required_level}")
     return level == required_level
 
 def init_session():
@@ -141,4 +141,5 @@ def init_session():
         st.session_state["tip_shown"] = False
     if "tour_completed" not in st.session_state:
         st.session_state["tour_completed"] = False
+
 
