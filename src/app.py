@@ -8,7 +8,7 @@ from modules.auth import views as auth_views
 
 def main():
     # Run login/authentication first
-    login_user()
+    auth_views.login_user()
     init_session()
     show_branding()
 
@@ -79,6 +79,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
