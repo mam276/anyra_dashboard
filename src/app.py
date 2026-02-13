@@ -27,8 +27,12 @@ def main():
 
     if menu == "Auth":
         from modules.auth import views
-        views.show_auth()
-
+        choice = st.sidebar.radio("Auth Options", ["Login/Signup", "Forgot Password"])
+        if choice == "Login/Signup":
+            views.show_auth()
+        else:
+            views.show_forgot_password()
+            
     elif menu == "Data":
         from modules.data_pipeline import services
         services.show_data_pipeline()
@@ -84,3 +88,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
