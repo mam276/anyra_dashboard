@@ -5,7 +5,7 @@ import bcrypt
 import secrets
 import time
 from utils.email import send_email
-from utils.audit import log_action
+from utils.audit import log_event
 
 # In-memory user store (replace with DB in production)
 USERS = {}
@@ -141,3 +141,4 @@ def init_session():
         st.session_state["tip_shown"] = False
     if "tour_completed" not in st.session_state:
         st.session_state["tour_completed"] = False
+
