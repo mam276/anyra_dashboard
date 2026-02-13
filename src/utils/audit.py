@@ -6,9 +6,9 @@ LOG_FILE = os.getenv("AUDIT_LOG_FILE", "logs/audit.log")
 
 def log_event(user: str, event: str, details: str = "") -> bool:
     """
-    Log structured audit events (auth, RBAC, onboarding, donation).
-    Writes to a JSON-formatted text file; replace with DB or logging service in production.
-    Returns True if log entry was written successfully.
+    Unified audit logger for Anyra Dashboard.
+    Records authentication, RBAC, onboarding, and donation events.
+    Writes JSON lines to a text file.
     """
     entry = {
         "timestamp": datetime.datetime.now().isoformat(),
