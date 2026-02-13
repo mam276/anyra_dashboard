@@ -10,11 +10,9 @@ from utils.session import (
 def show_auth():
     """
     Unified authentication screen with Login and Signup tabs.
-    Uses backend functions from utils.session.
     """
     st.title("Anyra Dashboard – Access")
 
-    # Tabs for Login and Signup
     tab_login, tab_signup = st.tabs(["Login", "Sign Up"])
 
     # ---------------------------
@@ -25,8 +23,11 @@ def show_auth():
         email = st.text_input("Email", key="login_email")
         password = st.text_input("Password", type="password", key="login_password")
         if st.button("Login", key="login_button"):
-            if do_login(email, password):
+            if not email or not password:
+                st.error("Email and password are required.")
+            elif do_login(email, password):
                 st.session_state["authenticated"] = True
+                st.session_state["user"] = email
                 st.success("Logged in successfully.")
             else:
                 st.error("Invalid credentials.")
@@ -39,7 +40,11 @@ def show_auth():
         email = st.text_input("Email", key="signup_email")
         password = st.text_input("Password", type="password", key="signup_password")
         if st.button("Sign Up", key="signup_button"):
-            if signup_user(email, password):
+            if not email or not password:
+                st.error("Email and password are required.")
+            elif "@" not in email:
+                st.error("Please enter a valid email address.")
+            elif signup_user(email, password):
                 st.success("Signup successful. Please log in.")
             else:
                 st.error("Email already exists.")
@@ -51,7 +56,9 @@ def show_forgot_password():
     st.subheader("Forgot Password")
     email = st.text_input("Enter your registered email")
     if st.button("Send Reset Link"):
-        if forgot_password(email):
+        if not email:
+            st.error("Email is required.")
+        elif forgot_password(email):
             st.success("Password reset link sent to your email.")
         else:
             st.error("Email not found.")
@@ -63,7 +70,9 @@ def show_reset_form(token: str):
     st.subheader("Reset Your Password")
     new_password = st.text_input("Enter new password", type="password")
     if st.button("Reset Password"):
-        if reset_password(token, new_password):
+        if not new_password:
+            st.error("Password is required.")
+        elif reset_password(token, new_password):
             st.success("Password reset successful. Please login.")
         else:
             st.error("Invalid or expired reset link.")
