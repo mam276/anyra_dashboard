@@ -1,5 +1,3 @@
-# src/modules/auth/views.py
-
 import streamlit as st
 from utils.session import (
     login_user as do_login,
@@ -9,44 +7,40 @@ from utils.session import (
     reset_password
 )
 
-def login_user():
-    """
-    Wrapper to ensure login runs at app startup.
-    Uses login_user from utils.session.
-    """
-    if st.session_state.get("authenticated"):
-        return
-    st.sidebar.title("Login")
-    email = st.sidebar.text_input("Email")
-    password = st.sidebar.text_input("Password", type="password")
-    if st.sidebar.button("Login"):
-        if do_login(email, password):
-            st.session_state["authenticated"] = True
-            st.success("Logged in successfully.")
-        else:
-            st.error("Invalid credentials.")
-
 def show_auth():
     """
-    Displays the Auth module UI when selected from the sidebar.
+    Unified authentication screen with Login and Signup tabs.
+    Uses backend functions from utils.session.
     """
-    st.subheader("Authentication")
-    choice = st.radio("Select", ["Login", "Signup"])
-    if choice == "Login":
-        email = st.text_input("Email")
-        password = st.text_input("Password", type="password")
-        if st.button("Login"):
+    st.title("Anyra Dashboard – Access")
+
+    # Tabs for Login and Signup
+    tab_login, tab_signup = st.tabs(["Login", "Sign Up"])
+
+    # ---------------------------
+    # Login Tab
+    # ---------------------------
+    with tab_login:
+        st.subheader("Login")
+        email = st.text_input("Email", key="login_email")
+        password = st.text_input("Password", type="password", key="login_password")
+        if st.button("Login", key="login_button"):
             if do_login(email, password):
                 st.session_state["authenticated"] = True
                 st.success("Logged in successfully.")
             else:
                 st.error("Invalid credentials.")
-    else:
-        email = st.text_input("Email")
-        password = st.text_input("Password", type="password")
-        if st.button("Signup"):
+
+    # ---------------------------
+    # Signup Tab
+    # ---------------------------
+    with tab_signup:
+        st.subheader("Sign Up")
+        email = st.text_input("Email", key="signup_email")
+        password = st.text_input("Password", type="password", key="signup_password")
+        if st.button("Sign Up", key="signup_button"):
             if signup_user(email, password):
-                st.success("Signup successful. Please login.")
+                st.success("Signup successful. Please log in.")
             else:
                 st.error("Email already exists.")
 
