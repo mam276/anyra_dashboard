@@ -44,6 +44,8 @@ def show_auth():
                 st.error("Email and password are required.")
             elif "@" not in email:
                 st.error("Please enter a valid email address.")
+            elif len(password) < 8:
+                st.error("Password must be at least 8 characters long.")
             elif signup_user(email, password):
                 st.success("Signup successful. Please log in.")
             else:
@@ -72,7 +74,16 @@ def show_reset_form(token: str):
     if st.button("Reset Password"):
         if not new_password:
             st.error("Password is required.")
+        elif len(new_password) < 8:
+            st.error("Password must be at least 8 characters long.")
         elif reset_password(token, new_password):
             st.success("Password reset successful. Please login.")
         else:
             st.error("Invalid or expired reset link.")
+        if not new_password:
+            st.error("Password is required.")
+        elif reset_password(token, new_password):
+            st.success("Password reset successful. Please login.")
+        else:
+            st.error("Invalid or expired reset link.")
+
