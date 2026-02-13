@@ -104,14 +104,15 @@ def main():
 
     elif menu == "CRM":
         from modules.crm import views
-        # Optional: enforce subscription or role
-        if enforce_subscription("premium") or enforce_role("sales"):
+        # Only allow premium subscribers or admin role
+        if enforce_subscription("premium") or enforce_role("admin"):
             views.show_crm_dashboard()
         else:
-            st.error("CRM is available only to premium users or sales role.")
+            st.error("CRM is available only to premium users or admin role.")
 
 if __name__ == "__main__":
     main()
+
 
 
 
