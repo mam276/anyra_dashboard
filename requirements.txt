@@ -1,4 +1,4 @@
-streamlit
+streamlit>=1.31
 sqlalchemy
 bcrypt
 pandas
@@ -8,4 +8,5 @@ apscheduler
 scikit-learn
 joblib
 qrcode
+
 pillow
