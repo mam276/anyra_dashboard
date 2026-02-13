@@ -1,10 +1,11 @@
 import streamlit as st
-from src.utils.session import init_session
-from src.utils.scheduler import start_scheduler
-from src.utils.branding import show_branding
-from src.utils.rbac import enforce_role, enforce_subscription
-from src.utils.tenants import get_tenant_data
+from utils.session import init_session
+from utils.scheduler import start_scheduler
+from utils.branding import show_branding
+from utils.rbac import enforce_role, enforce_subscription
+from utils.tenants import get_tenant_data
 from modules.auth import views as auth_views
+
 
 def main():
     # Run login/authentication first
@@ -79,6 +80,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
