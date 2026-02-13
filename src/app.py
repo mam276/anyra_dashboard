@@ -24,7 +24,7 @@ def main():
     onboarding_views.start_guided_tour()
    
     # Check query params for reset route
-    params = st.experimental_get_query_params()
+    params = params = st.query_params
     if params.get("page") == ["reset"] and "token" in params:
         token = params["token"][0]
         auth_views.show_reset_form(token)
@@ -112,6 +112,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
