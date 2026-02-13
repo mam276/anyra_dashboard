@@ -123,3 +123,21 @@ def enforce_subscription(required_level: str):
     if level != required_level:
         log_action(st.session_state.get("user", "anonymous"), f"subscription_denied:{required_level}")
     return level == required_level
+
+def init_session():
+    """
+    Initialize Streamlit session state with defaults.
+    Ensures required keys exist before the app runs.
+    """
+    if "user" not in st.session_state:
+        st.session_state["user"] = None
+    if "subscription_level" not in st.session_state:
+        st.session_state["subscription_level"] = "free"
+    if "role" not in st.session_state:
+        st.session_state["role"] = "guest"
+    if "popup_shown" not in st.session_state:
+        st.session_state["popup_shown"] = False
+    if "tip_shown" not in st.session_state:
+        st.session_state["tip_shown"] = False
+    if "tour_completed" not in st.session_state:
+        st.session_state["tour_completed"] = False
