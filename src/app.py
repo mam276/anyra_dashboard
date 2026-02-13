@@ -6,6 +6,7 @@ from utils.rbac import enforce_role, enforce_subscription
 from utils.tenants import get_tenant_data
 from modules.auth import views as auth_views
 from modules.onboarding import views as onboarding_views
+from modules import crm
 
 def main():
     # Initialize session and scheduler
@@ -37,7 +38,7 @@ def main():
         "Navigation",
         [
             "Auth", "Data", "Analytics", "Visualization", "Insights",
-            "Reports", "Payments", "Admin", "Inventory", "Copilot"
+            "Reports", "Payments", "Admin", "Inventory", "Copilot", "CRM"
         ]
     )
 
@@ -101,8 +102,17 @@ def main():
         from modules.copilot import views
         views.show_copilot()
 
+    elif menu == "CRM":
+        from modules.crm import views
+        # Optional: enforce subscription or role
+        if enforce_subscription("premium") or enforce_role("sales"):
+            views.show_crm_dashboard()
+        else:
+            st.error("CRM is available only to premium users or sales role.")
+
 if __name__ == "__main__":
     main()
+
 
 
 
