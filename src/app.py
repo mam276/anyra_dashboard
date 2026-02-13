@@ -5,6 +5,7 @@ from utils.branding import show_branding
 from utils.rbac import enforce_role, enforce_subscription
 from utils.tenants import get_tenant_data
 from modules.auth import views as auth_views
+from modules.onboarding import views as onboarding_views
 
 def main():
     # Initialize session and scheduler
@@ -12,6 +13,9 @@ def main():
     start_scheduler()
     show_branding()
 
+    # Show onboarding popup
+    onboarding_views.show_welcome_popup()
+   
     # Check query params for reset route
     params = st.experimental_get_query_params()
     if params.get("page") == ["reset"] and "token" in params:
@@ -93,3 +97,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
