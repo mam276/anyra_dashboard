@@ -6,6 +6,8 @@ from utils.rbac import enforce_role, enforce_subscription
 from utils.tenants import get_tenant_data
 from modules.auth import views as auth_views
 from modules.onboarding import views as onboarding_views
+from modules.donation import views as donation_views
+from modules.audit import views as audit_views
 from modules import crm
 
 def main():
@@ -28,7 +30,7 @@ def main():
     if params.get("page") == ["reset"] and "token" in params:
         token = params["token"][0]
         auth_views.show_reset_form(token)
-        return
+        return   # stop here after reset form
 
     # -------- Authentication Gate -----------------
     if st.session_state.get("user") is None:
@@ -43,29 +45,29 @@ def main():
 
             if st.button("Continue"):
                 st.session_state["show_welcome"] = False
-            return
+            return   # stop here after welcome screen
 
         # Unified login/signup screen (tabs)
         auth_views.show_auth()
-        return  # stop here until user logs in
+        return   # stop here until user logs in
 
-    # Sidebar navigation
-        
-        menu = st.sidebar.radio(
+    # -------- Sidebar Navigation (only after login) -----------------
+    st.sidebar.title("Navigation")
+    menu = st.sidebar.radio(
         "Navigation",
         [
             "Auth", "Data", "Analytics", "Visualization", "Insights",
-            "Reports", "Payments", "Admin", "Inventory", "Copilot", "CRM"
+            "Reports", "Payments", "Admin", "Inventory", "Copilot", "CRM",
+            "Donation", "Audit"
         ]
     )
 
     if menu == "Auth":
-        from modules.auth import views
         auth_choice = st.sidebar.radio("Auth Options", ["Login/Signup", "Forgot Password"])
         if auth_choice == "Login/Signup":
-            views.show_auth()
+            auth_views.show_auth()
         elif auth_choice == "Forgot Password":
-            views.show_forgot_password()
+            auth_views.show_forgot_password()
 
     elif menu == "Data":
         from modules.data_pipeline import services
@@ -73,7 +75,6 @@ def main():
 
     elif menu == "Analytics":
         from modules.analytics import services
-        # Subscription enforcement
         if enforce_subscription("premium"):
             services.show_analytics()
         else:
@@ -89,7 +90,6 @@ def main():
 
     elif menu == "Reports":
         from modules.reporting import views
-        # Subscription enforcement
         if enforce_subscription("premium"):
             views.show_reporting()
         else:
@@ -97,7 +97,6 @@ def main():
 
     elif menu == "Payments":
         from modules.payments import views
-        # Admin only
         if enforce_role("admin"):
             views.show_payments()
         else:
@@ -105,7 +104,6 @@ def main():
 
     elif menu == "Admin":
         from modules.admin import views
-        # Admin only
         if enforce_role("admin"):
             views.show_admin()
         else:
@@ -121,25 +119,22 @@ def main():
 
     elif menu == "CRM":
         from modules.crm import views
-        # Only allow premium subscribers or admin role
         if enforce_subscription("premium") or enforce_role("admin"):
             views.show_crm_dashboard()
         else:
             st.error("CRM is available only to premium users or admin role.")
 
+    elif menu == "Donation":
+        if st.session_state.get("user"):
+            donation_views.show_donation()
+        else:
+            st.error("You must be logged in to access donations.")
+
+    elif menu == "Audit":
+        if enforce_role("admin"):
+            audit_views.show_audit_dashboard()
+        else:
+            st.error("You do not have permission to view audit logs.")
+
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
