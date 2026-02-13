@@ -6,9 +6,9 @@ from utils.branding import show_branding
 def main():
     init_session()
     show_branding()
-        menu = st.sidebar.radio("Navigation", [
-        "Auth", "Data", "Analytics", "Visualization", "Insights",
-        "Reports", "Payments", "Admin", "Inventory", "Copilot"
+    menu = st.sidebar.radio("Navigation", [
+    "Auth", "Data", "Analytics", "Visualization", "Insights",
+    "Reports", "Payments", "Admin", "Inventory", "Copilot"
     ])
 
     if menu == "Auth":
@@ -45,6 +45,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 
