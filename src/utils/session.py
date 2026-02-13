@@ -44,8 +44,31 @@ def signup_user(name: str, email: str, password: str):
     st.session_state["user"] = {"name": name, "email": email}
     return st.session_state["user"]
 
+def forgot_password(email: str):
+    """
+    Handle forgot password request.
+    For demo: just return True if user exists.
+    In production: generate reset token, send email.
+    """
+    user = USERS.get(email)
+    if user:
+        # In real app: send reset link via email
+        return True
+    return False
+
+def reset_password(email: str, new_password: str):
+    """
+    Reset the user's password.
+    """
+    user = USERS.get(email)
+    if user:
+        user["password"] = new_password
+        return True
+    return False
+
 def current_user():
     """
     Return the current logged-in user dict, or None.
     """
     return st.session_state.get("user")
+
