@@ -65,4 +65,5 @@ def show_forgot_password():
             st.error("Failed to reset password.")
 
 
+print("Auth views loaded:", dir())
 
