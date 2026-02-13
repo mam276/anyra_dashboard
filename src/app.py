@@ -25,13 +25,22 @@ def main():
    
     # Check query params for reset route
     params = params = st.query_params
+    try:
+        params = st.query_params
+    except AttributeError:
+        params = st.experimental_get_query_params()
+
     if params.get("page") == ["reset"] and "token" in params:
         token = params["token"][0]
         auth_views.show_reset_form(token)
         return
-
+    #--------Authentication Gate -----------------
     # Run login/authentication first
-    auth_views.login_user()
+
+    if st.session_state.get("user") is None:
+        # Show login/signup screen
+        auth_views.login_user()
+        return  # stop here until user logs in
 
     # Sidebar navigation
     menu = st.sidebar.radio(
@@ -112,6 +121,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
