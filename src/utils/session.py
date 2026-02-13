@@ -2,9 +2,13 @@
 
 import streamlit as st
 import bcrypt
+import secrets
+import time
+from utils.email import send_email  # assumes you have a send_email utility
 
 # In-memory user store (replace with DB in production)
 USERS = {}
+RESET_TOKENS = {}
 
 def signup_user(email: str, password: str, role: str = "user", subscription_level: str = "free"):
     """
@@ -49,23 +53,47 @@ def logout_user():
     st.session_state.pop("role", None)
     st.session_state.pop("subscription_level", None)
 
+# ---------------------------
+# Forgot Password Flow
+# ---------------------------
+
 def forgot_password(email: str):
     """
-    Demo forgot password: return True if user exists.
-    In production: generate token and send email.
-    """
-    return email in USERS
-
-def reset_password(email: str, new_password: str):
-    """
-    Reset password securely with hashing.
+    Generate a reset token if user exists and send email.
     """
     user = USERS.get(email)
     if user:
-        hashed = bcrypt.hashpw(new_password.encode("utf-8"), bcrypt.gensalt())
-        user["password"] = hashed
+        token = secrets.token_urlsafe(16)
+        RESET_TOKENS[token] = {"email": email, "expires": time.time() + 900}  # 15 min expiry
+        send_reset_email(email, token)
         return True
     return False
+
+def send_reset_email(email: str, token: str):
+    """
+    Send reset link via email.
+    """
+    reset_link = f"https://yourapp.streamlit.app/?page=reset&token={token}"
+    subject = "Password Reset Request"
+    body = f"Click the link below to reset your password:\n{reset_link}\nThis link expires in 15 minutes."
+    send_email(email, subject, body)
+
+def reset_password(token: str, new_password: str):
+    """
+    Reset password securely using token.
+    """
+    data = RESET_TOKENS.get(token)
+    if data and time.time() < data["expires"]:
+        email = data["email"]
+        hashed = bcrypt.hashpw(new_password.encode("utf-8"), bcrypt.gensalt())
+        USERS[email]["password"] = hashed
+        del RESET_TOKENS[token]  # invalidate token
+        return True
+    return False
+
+# ---------------------------
+# RBAC & Subscription
+# ---------------------------
 
 def enforce_role(required_role: str):
     """
