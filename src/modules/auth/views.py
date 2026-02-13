@@ -63,7 +63,3 @@ def show_forgot_password():
             st.success("Password reset successful. Please login.")
         else:
             st.error("Failed to reset password.")
-
-
-print("Auth views loaded:", dir())
-
