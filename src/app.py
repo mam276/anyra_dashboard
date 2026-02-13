@@ -37,7 +37,7 @@ def main():
         st.title("Welcome to Anyra Dashboard 👋")
         st.write("Explore insights tailored to your data — sign up or log in to continue.")
 
-        # Unified login/signup screen
+        # Unified login/signup screen (tabs)
         auth_views.show_auth()
         return  # stop here until user logs in
 
@@ -120,6 +120,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
