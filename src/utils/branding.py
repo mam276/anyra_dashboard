@@ -3,13 +3,7 @@ from PIL import Image
 import streamlit as st
 
 def show_branding():
-    logo_path = Path("assets/logo.png")
-    if logo_path.exists():
-        st.sidebar.image(str(logo_path))
-    else:
-        st.sidebar.write("Anyra Dashboard")
-
-    
+    logo_path = Path("assets/logo.png") 
     if logo_path.exists():
         try:
             img = Image.open(logo_path)
@@ -27,4 +21,5 @@ def show_branding():
             st.sidebar.write("Anyra Dashboard")
     else:
         st.sidebar.write("Anyra Dashboard")
+
 
