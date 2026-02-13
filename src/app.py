@@ -38,10 +38,13 @@ def main():
     if st.session_state.get("user") is None:
         # Show welcome screen first
         st.title("Welcome to Anyra Dashboard 👋")
-        st.write("Please sign up or log in to continue.")
+        st.write("Explore insights tailored to your data — sign up or log in to continue.")
 
-        # Only then show login/signup form
-        auth_views.login_user()
+        # Only show login form if user clicks
+        if st.button("Log In"):
+            auth_views.login_user()
+        if st.button("Sign Up"):
+            auth_views.signup_user()  # assuming you have this wired
         return  # stop here until user logs in
 
     # Sidebar navigation
@@ -123,6 +126,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
