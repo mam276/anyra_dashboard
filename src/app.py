@@ -24,7 +24,6 @@ def main():
     onboarding_views.start_guided_tour()
    
     # Check query params for reset route
-    params = params = st.query_params
     try:
         params = st.query_params
     except AttributeError:
@@ -121,6 +120,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
