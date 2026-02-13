@@ -43,14 +43,13 @@ def main():
 
             if st.button("Continue"):
                 st.session_state["show_welcome"] = False
-                st.experimental_rerun()
             return
 
         # Unified login/signup screen (tabs)
         auth_views.show_auth()
         return  # stop here until user logs in
 
-        # Sidebar navigation
+    # Sidebar navigation
         
         menu = st.sidebar.radio(
         "Navigation",
@@ -130,6 +129,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
