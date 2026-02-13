@@ -8,10 +8,13 @@ from modules.auth import views as auth_views
 
 
 def main():
+    # Initialize session and scheduler
+    init_session()
+    start_scheduler()
+    show_branding()
+
     # Run login/authentication first
     auth_views.login_user()
-    init_session()
-    show_branding()
 
     # Sidebar navigation
     menu = st.sidebar.radio(
@@ -78,24 +81,6 @@ def main():
         from modules.copilot import views
         views.show_copilot()
 
+
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
