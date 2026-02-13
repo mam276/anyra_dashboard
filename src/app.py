@@ -13,11 +13,14 @@ def main():
     start_scheduler()
     show_branding()
 
-    # Show onboarding popup
+    # Show Welcome popup
     onboarding_views.show_welcome_popup()
 
     # Show rotating tip for free users
     onboarding_views.show_rotating_tips()
+
+    # Start guided tour for new users
+    onboarding_views.start_guided_tour()
    
     # Check query params for reset route
     params = st.experimental_get_query_params()
@@ -100,5 +103,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
