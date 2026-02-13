@@ -1,5 +1,3 @@
-# src/utils/branding.py
-
 from pathlib import Path
 from PIL import Image
 import streamlit as st
@@ -29,4 +27,5 @@ def show_branding():
             st.sidebar.write("Anyra Dashboard")
     else:
         st.sidebar.write("Anyra Dashboard")
+
 
