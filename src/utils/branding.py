@@ -22,10 +22,4 @@ def show_branding():
     else:
         st.sidebar.write("Anyra Dashboard")
 
-        except Exception as e:
-            print(f"[ERROR] Branding image failed: {e}")
-            st.sidebar.write("Anyra Dashboard")
-    else:
-        st.sidebar.write("Anyra Dashboard")
-
 
