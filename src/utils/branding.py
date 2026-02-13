@@ -22,5 +22,7 @@ def show_branding():
     else:
         st.sidebar.write("Anyra Dashboard")
 
+print(f"[DEBUG] Looking for logo at: {logo_path.resolve()}")
+print(f"[DEBUG] Exists? {logo_path.exists()}")
 
 
