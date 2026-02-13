@@ -6,12 +6,18 @@ from utils.rbac import enforce_role, enforce_subscription
 from utils.tenants import get_tenant_data
 from modules.auth import views as auth_views
 
-
 def main():
     # Initialize session and scheduler
     init_session()
     start_scheduler()
     show_branding()
+
+    # Check query params for reset route
+    params = st.experimental_get_query_params()
+    if params.get("page") == ["reset"] and "token" in params:
+        token = params["token"][0]
+        auth_views.show_reset_form(token)
+        return
 
     # Run login/authentication first
     auth_views.login_user()
@@ -32,7 +38,7 @@ def main():
             views.show_auth()
         elif auth_choice == "Forgot Password":
             views.show_forgot_password()
-            
+
     elif menu == "Data":
         from modules.data_pipeline import services
         services.show_data_pipeline()
@@ -85,8 +91,5 @@ def main():
         from modules.copilot import views
         views.show_copilot()
 
-
 if __name__ == "__main__":
     main()
-
-
