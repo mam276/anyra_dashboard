@@ -44,3 +44,23 @@ def show_auth():
             if user:
                 st.session_state["user"] = user
                 st.success("Signup successful. Please login.")
+
+def show_forgot_password():
+    """
+    UI for forgot password flow.
+    """
+    st.subheader("Forgot Password")
+    email = st.text_input("Enter your registered email")
+    if st.button("Send Reset Link"):
+        if forgot_password(email):
+            st.success("Password reset link sent to your email (demo).")
+        else:
+            st.error("Email not found.")
+
+    new_password = st.text_input("Enter new password", type="password")
+    if st.button("Reset Password"):
+        if reset_password(email, new_password):
+            st.success("Password reset successful. Please login.")
+        else:
+            st.error("Failed to reset password.")
+
