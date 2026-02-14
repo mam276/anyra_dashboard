@@ -33,9 +33,15 @@ def show_copilot():
             mime="text/csv"
         )
 
-    # Show last activity
+    # Show last activity safely
     db = SessionLocal()
-    last_log = db.query(ActivityLog).filter(ActivityLog.user_id == user["id"]).order_by(ActivityLog.timestamp.desc()).first()
+    if user and "id" in user:
+        last_log = (
+            db.query(ActivityLog)
+            .filter(ActivityLog.user_id == user["id"])
+            .order_by(ActivityLog.timestamp.desc())
+            .first()
+        )
+        if last_log:
+            st.write("Last Activity:", f"{last_log.action} - {last_log.details}")
     db.close()
-    if last_log:
-        st.write("Last Activity:", f"{last_log.action} - {last_log.details}")
