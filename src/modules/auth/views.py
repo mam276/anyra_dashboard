@@ -27,7 +27,7 @@ def show_auth():
             elif do_login(email, password):
                 st.session_state["user"] = {"email": email}
                 st.success("Logged in successfully.")
-                st.experimental_rerun()
+                st.rerun()   # ✅ corrected
             else:
                 st.error("Invalid credentials.")
 
@@ -47,6 +47,7 @@ def show_auth():
                 st.error("Password must be at least 8 characters long.")
             elif signup_user(email, password):
                 st.success("Signup successful. Please log in.")
+                st.rerun()   # ✅ corrected
             else:
                 st.error("Email already exists.")
 
@@ -77,5 +78,6 @@ def show_reset_form(token: str):
             st.error("Password must be at least 8 characters long.")
         elif reset_password(token, new_password):
             st.success("Password reset successful. Please login.")
+            st.rerun()   # ✅ corrected
         else:
             st.error("Invalid or expired reset link.")
