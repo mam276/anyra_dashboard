@@ -1,17 +1,16 @@
 import os
 import streamlit as st
-from utils.session import init_session
-from utils.scheduler import start_scheduler
+from utils.session import init_session, start_scheduler
 from utils.branding import show_branding
 from utils.rbac import enforce_role, enforce_subscription
-from utils.tenants import get_tenant_data
 from modules.auth import views as auth_views
 from modules.onboarding import views as onboarding_views
 from modules.donation import views as donation_views
 from modules.audit import views as audit_views
-from modules import crm
+from modules import crm   # ✅ restored import
 
 def show_logo():
+    """Safely display logo if available."""
     logo_path = os.path.join(os.path.dirname(__file__), "assets", "logo.png")
     if os.path.exists(logo_path):
         st.image(logo_path, width=150)
@@ -44,9 +43,7 @@ def main():
 
         if st.session_state["show_welcome"]:
             # Show welcome screen first
-            
             show_logo()
-
             st.title("Welcome to Anyra Dashboard 👋")
             st.write("Explore insights tailored to your data — sign up or log in to continue.")
 
@@ -65,6 +62,20 @@ def main():
 
     # -------- Sidebar Navigation --------
     st.sidebar.title("Navigation")
+
+    # Show logged-in user info with role/subscription badges
+    user_info = st.session_state.get("user")
+    if user_info:
+        if isinstance(user_info, dict):
+            email = user_info.get("email", "Unknown")
+            role = user_info.get("role", "user")
+            subscription = user_info.get("subscription", "free")
+            st.sidebar.write(f"**Logged in as:** {email}")
+            st.sidebar.write(f"**Role:** {role}")
+            st.sidebar.write(f"**Subscription:** {subscription}")
+        else:
+            st.sidebar.write(f"**Logged in as:** {user_info}")
+
     menu = st.sidebar.radio(
         "Navigation",
         [
@@ -75,11 +86,16 @@ def main():
     )
 
     if menu == "Auth":
-        auth_choice = st.sidebar.radio("Auth Options", ["Login/Signup", "Forgot Password"])
+        auth_choice = st.sidebar.radio("Auth Options", ["Login/Signup", "Forgot Password", "Logout"])
         if auth_choice == "Login/Signup":
             auth_views.show_auth()
         elif auth_choice == "Forgot Password":
             auth_views.show_forgot_password()
+        elif auth_choice == "Logout":
+            # Clear session and rerun
+            st.session_state.clear()
+            st.success("You have been logged out.")
+            st.experimental_rerun()
 
     elif menu == "Data":
         from modules.data_pipeline import services
@@ -148,7 +164,5 @@ def main():
         else:
             st.error("You do not have permission to view audit logs.")
 
-
 if __name__ == "__main__":
     main()
-
