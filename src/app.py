@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 from utils.session import init_session
 from utils.scheduler import start_scheduler
@@ -10,6 +11,12 @@ from modules.donation import views as donation_views
 from modules.audit import views as audit_views
 from modules import crm
 
+def show_logo():
+    logo_path = os.path.join(os.path.dirname(__file__), "assets", "logo.png")
+    if os.path.exists(logo_path):
+        st.image(logo_path, width=150)
+    else:
+        st.warning("Logo not found at expected path: " + logo_path)
 
 def main():
     # Initialize session and scheduler
@@ -37,7 +44,9 @@ def main():
 
         if st.session_state["show_welcome"]:
             # Show welcome screen first
-            st.image("assets/logo.png", width=150)
+            
+            show_logo()
+
             st.title("Welcome to Anyra Dashboard 👋")
             st.write("Explore insights tailored to your data — sign up or log in to continue.")
 
@@ -142,3 +151,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
