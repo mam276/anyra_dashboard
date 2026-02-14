@@ -13,6 +13,7 @@ class User(Base):
     password_hash = Column(String, nullable=False)
     role = Column(String, default="user")
     subscription = Column(String, default="free")
+    remember_token = Column(String, nullable=True)   # ✅ new column
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 class ActivityLog(Base):
