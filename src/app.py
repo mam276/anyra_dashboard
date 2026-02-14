@@ -10,29 +10,26 @@ from modules.donation import views as donation_views
 from modules.audit import views as audit_views
 from modules import crm
 
+
 def main():
     # Initialize session and scheduler
     init_session()
     start_scheduler()
     show_branding()
 
-    # Show onboarding flows
-    onboarding_views.show_welcome_popup()
-    onboarding_views.show_rotating_tips()
-    onboarding_views.start_guided_tour()
-
-    # Check query params for reset route
+    # -------- Query Params Handling --------
     try:
         params = st.query_params
     except AttributeError:
         params = st.experimental_get_query_params()
 
-    if params.get("page") == ["reset"] and "token" in params:
+    page = params.get("page", [None])[0]
+    if page == "reset" and "token" in params:
         token = params["token"][0]
         auth_views.show_reset_form(token)
-        return   # stop here after reset form
+        return  # stop here after reset form
 
-    # -------- Authentication Gate -----------------
+    # -------- Authentication Gate --------
     if st.session_state.get("user") is None:
         # Initialize welcome flag
         if "show_welcome" not in st.session_state:
@@ -40,21 +37,24 @@ def main():
 
         if st.session_state["show_welcome"]:
             # Show welcome screen first
-
             st.image("assets/logo.png", width=150)
-
             st.title("Welcome to Anyra Dashboard 👋")
             st.write("Explore insights tailored to your data — sign up or log in to continue.")
 
             if st.button("Continue"):
                 st.session_state["show_welcome"] = False
-            return   # stop here after welcome screen
+            return  # stop here after welcome screen
 
         # Unified login/signup screen (tabs)
         auth_views.show_auth()
-        return   # stop here until user logs in
+        return  # stop here until user logs in
 
-    # -------- Sidebar Navigation (only after login) -----------------
+    # -------- Onboarding Flows (only after login) --------
+    onboarding_views.show_welcome_popup()
+    onboarding_views.show_rotating_tips()
+    onboarding_views.start_guided_tour()
+
+    # -------- Sidebar Navigation --------
     st.sidebar.title("Navigation")
     menu = st.sidebar.radio(
         "Navigation",
@@ -139,6 +139,6 @@ def main():
         else:
             st.error("You do not have permission to view audit logs.")
 
+
 if __name__ == "__main__":
     main()
-
