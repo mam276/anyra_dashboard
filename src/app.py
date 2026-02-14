@@ -40,6 +40,9 @@ def main():
 
         if st.session_state["show_welcome"]:
             # Show welcome screen first
+
+            st.image("assets/logo.png", width=150)
+
             st.title("Welcome to Anyra Dashboard 👋")
             st.write("Explore insights tailored to your data — sign up or log in to continue.")
 
@@ -138,3 +141,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
