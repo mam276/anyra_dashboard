@@ -1,8 +1,12 @@
 import os
 import streamlit as st
-from utils.session import init_session, start_scheduler
+
+# Keep imports separate, matching your original structure
+from utils.session import init_session
+from utils.scheduler import start_scheduler
 from utils.branding import show_branding
 from utils.rbac import enforce_role, enforce_subscription
+
 from modules.auth import views as auth_views
 from modules.onboarding import views as onboarding_views
 from modules.donation import views as donation_views
