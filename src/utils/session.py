@@ -1,5 +1,3 @@
-# src/utils/session.py
-
 import streamlit as st
 import bcrypt
 import secrets
@@ -31,11 +29,27 @@ def login_user(email: str, password: str):
     user = db.query(User).filter_by(email=email).first()
     db.close()
     if user and bcrypt.checkpw(password.encode("utf-8"), user.password_hash.encode("utf-8")):
-        st.session_state["user"] = {"email": email, "role": user.role, "subscription": user.subscription}
+        st.session_state["user"] = {
+            "id": user.id,
+            "email": email,
+            "role": user.role,
+            "subscription": user.subscription
+        }
         log_event(email, "login")
         return True
     log_event(email, "failed_login")
     return False
+
+def current_user():
+    """Return current logged-in user info from session_state."""
+    return st.session_state.get("user")
+
+def logout_user():
+    """Clear session state and log logout."""
+    user = st.session_state.get("user")
+    st.session_state.clear()
+    if user:
+        log_event(user.get("email"), "logout")
 
 def forgot_password(email: str):
     """Generate a reset token if user exists and send email."""
@@ -76,13 +90,13 @@ def reset_password(token: str, new_password: str):
 def enforce_role(required_role: str):
     role = st.session_state.get("role", "user")
     if role != required_role:
-        log_event(st.session_state.get("user", "anonymous"), f"role_denied:{required_role}")
+        log_event(st.session_state.get("user", {}).get("email", "anonymous"), f"role_denied:{required_role}")
     return role == required_role
 
 def enforce_subscription(required_level: str):
     level = st.session_state.get("subscription", "free")
     if level != required_level:
-        log_event(st.session_state.get("user", "anonymous"), f"subscription_denied:{required_level}")
+        log_event(st.session_state.get("user", {}).get("email", "anonymous"), f"subscription_denied:{required_level}")
     return level == required_level
 
 def init_session():
