@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from utils.session import current_user
 from utils.db import SessionLocal, ActivityLog
 from modules.insights.services import insights_coverage
@@ -12,7 +13,7 @@ def show_copilot():
         st.warning("Please login first.")
         return
 
-    st.info(f"Hello {user['name']}! I’m your Copilot guide.")
+    st.info(f"Hello {user['email']}! I’m your Copilot guide.")
 
     if df is not None:
         coverage = insights_coverage(df)
@@ -25,13 +26,16 @@ def show_copilot():
             for m in missing:
                 st.write(f"- {m['metric']} requires {m['required_cols']}")
 
-        st.download_button("Download Coverage Report (CSV)", 
-                           data=pd.DataFrame(coverage).to_csv(index=False), 
-                           file_name="coverage_report.csv", 
-                           mime="text/csv")
+        st.download_button(
+            "Download Coverage Report (CSV)",
+            data=pd.DataFrame(coverage).to_csv(index=False),
+            file_name="coverage_report.csv",
+            mime="text/csv"
+        )
 
     # Show last activity
     db = SessionLocal()
-    last_log = db.query(ActivityLog).filter(ActivityLog.user_id==user["id"]).order_by(ActivityLog.timestamp.desc()).first()
+    last_log = db.query(ActivityLog).filter(ActivityLog.user_id == user["id"]).order_by(ActivityLog.timestamp.desc()).first()
+    db.close()
     if last_log:
         st.write("Last Activity:", f"{last_log.action} - {last_log.details}")
