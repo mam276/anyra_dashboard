@@ -11,7 +11,7 @@ from modules.auth import views as auth_views
 from modules.onboarding import views as onboarding_views
 from modules.donation import views as donation_views
 from modules.audit import views as audit_views
-from modules import crm   # ✅ restored import
+from modules import crm 
 
 def show_logo():
     """Safely display logo if available."""
@@ -31,7 +31,7 @@ def main():
     try:
         params = st.query_params
     except AttributeError:
-        params = st.experimental_get_query_params()
+        params = st.query_params()
 
     page = params.get("page", [None])[0]
     if page == "reset" and "token" in params:
@@ -168,4 +168,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
