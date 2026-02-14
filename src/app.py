@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 
-# Keep imports separate, matching your original structure
+# Correct imports, matching your project structure
 from utils.session import init_session
 from utils.scheduler import start_scheduler
 from utils.branding import show_branding
@@ -55,7 +55,7 @@ def main():
                 st.session_state["show_welcome"] = False
             return  # stop here after welcome screen
 
-        # Unified login/signup screen (tabs)
+        # Unified login/signup/forgot password screen (tabs)
         auth_views.show_auth()
         return  # stop here until user logs in
 
@@ -90,11 +90,9 @@ def main():
     )
 
     if menu == "Auth":
-        auth_choice = st.sidebar.radio("Auth Options", ["Login/Signup", "Forgot Password", "Logout"])
+        auth_choice = st.sidebar.radio("Auth Options", ["Login/Signup", "Logout"])
         if auth_choice == "Login/Signup":
             auth_views.show_auth()
-        elif auth_choice == "Forgot Password":
-            auth_views.show_forgot_password()
         elif auth_choice == "Logout":
             # Clear session and rerun
             st.session_state.clear()
