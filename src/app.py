@@ -97,7 +97,7 @@ def main():
             # Clear session and rerun
             st.session_state.clear()
             st.success("You have been logged out.")
-            st.experimental_rerun()
+            st.rerun()
 
     elif menu == "Data":
         from modules.data_pipeline import services
@@ -168,3 +168,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
