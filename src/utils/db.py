@@ -6,6 +6,15 @@ Base = declarative_base()
 engine = create_engine("sqlite:///anyra.db")
 SessionLocal = sessionmaker(bind=engine)
 
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True)
+    email = Column(String, unique=True, nullable=False)
+    password_hash = Column(String, nullable=False)
+    role = Column(String, default="user")
+    subscription = Column(String, default="free")
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
 class ActivityLog(Base):
     __tablename__ = "activity_logs"
     id = Column(Integer, primary_key=True)
