@@ -5,9 +5,9 @@ import datetime
 Base = declarative_base()
 
 # Supabase connection string
-DATABASE_URL = "postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
+DATABASE_URL = "postgresql://postgres:[.78QW5%_Whg9%P8] @db.umsduupzfwkdkxluueuv.supabase.co:5432/postgres"
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(https://umsduupzfwkdkxluueuv.supabase.co)
 SessionLocal = sessionmaker(bind=engine)
 
 class User(Base):
@@ -37,3 +37,4 @@ class Subscription(Base):
     trial_end_date = Column(DateTime)
 
 Base.metadata.create_all(engine)
+
