@@ -6,7 +6,7 @@ Base = declarative_base()
 
 # Supabase connection string
 DATABASE_URL = "postgresql://postgres:svYzxlLD7y7DOJ7p@db.umsduupzfwkdkxluueuv.supabase.co:5432/postgres"
-engine = create_engine(https://umsduupzfwkdkxluueuv.supabase.co)
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 
 class User(Base):
@@ -36,6 +36,7 @@ class Subscription(Base):
     trial_end_date = Column(DateTime)
 
 Base.metadata.create_all(engine)
+
 
 
 
