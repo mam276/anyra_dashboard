@@ -1,32 +1,69 @@
 import streamlit as st
+import qrcode
+from io import BytesIO
 from utils.audit import log_event
 
+
+def generate_qr(data: str):
+    """Generate QR code image bytes."""
+    qr = qrcode.QRCode(box_size=8, border=2)
+    qr.add_data(data)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    buf.seek(0)
+    return buf
+
+
 def show_donation():
-    """
-    Donation module for Anyra Dashboard.
-    Supports multiple payment methods (Stripe, PayPal, UPI).
-    """
-    st.subheader("Support Anyra Dashboard ❤️")
-    st.write("Your contributions help us improve and keep the service running.")
+    st.title("Support ANYRA ❤️")
 
-    # Payment links (replace with real ones)
-    stripe_url = "https://checkout.stripe.com/pay/cs_test_12345"
-    paypal_url = "https://www.paypal.com/donate/?hosted_button_id=YOUR_BUTTON_ID"
-    upi_url = "upi://pay?pa=yourupi@bank&pn=AnyraDashboard&cu=INR"
+    st.write("Choose your preferred donation method below.")
 
-    user = st.session_state.get("user", "anonymous")
+    upi_id = "yourupi@upi"
+    name = "ANYRA"
+    amount = st.number_input("Donation Amount (INR)", min_value=1, step=1)
 
-    if st.button("Donate via Stripe"):
-        log_event(user, "donation_attempt", "Stripe")
-        st.markdown(f"[Click here to complete donation]({stripe_url})")
+    # Base UPI link
+    upi_link = f"upi://pay?pa={upi_id}&pn={name}&am={amount}&cu=INR"
 
-    if st.button("Donate via PayPal"):
-        log_event(user, "donation_attempt", "PayPal")
-        st.markdown(f"[Click here to complete donation]({paypal_url})")
+    # Mobile-friendly intent links
+    gpay_link = (
+        f"https://pay.google.com/gp/p/ui/pay?"
+        f"pa={upi_id}&pn={name}&am={amount}&cu=INR"
+    )
 
-    if st.button("Donate via UPI"):
-        log_event(user, "donation_attempt", "UPI")
-        st.markdown(f"[Click here to complete donation]({upi_url})")
+    phonepe_link = f"https://phon.pe/upi/{upi_id}?am={amount}&pn={name}"
 
+    paytm_link = (
+        f"paytmmp://pay?pa={upi_id}&pn={name}&am={amount}&cu=INR"
+    )
 
+    st.subheader("Tap to Pay (Mobile Only)")
+    st.write("If you're on a mobile device, tap one of the buttons below:")
 
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown(f"[Google Pay]({gpay_link})")
+    with col2:
+        st.markdown(f"[PhonePe]({phonepe_link})")
+    with col3:
+        st.markdown(f"[Paytm]({paytm_link})")
+
+    st.divider()
+
+    st.subheader("Scan to Pay (Desktop & Mobile)")
+    st.write("If you're on a laptop or desktop, scan this QR code:")
+
+    qr_img = generate_qr(upi_link)
+    st.image(qr_img, width=250)
+
+    st.caption(f"UPI ID: **{upi_id}**")
+
+    # Log donation intent
+    user_email = st.session_state.get("user", {}).get("email", "guest")
+    log_event(user_email, "donation_view", f"amount={amount}")
+
+    st.success("Donation options generated successfully.")
