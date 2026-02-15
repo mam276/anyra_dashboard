@@ -3,7 +3,11 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 import datetime
 
 Base = declarative_base()
-engine = create_engine("sqlite:///anyra.db")
+
+# Supabase connection string
+DATABASE_URL = "postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
+
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 
 class User(Base):
@@ -13,7 +17,7 @@ class User(Base):
     password_hash = Column(String, nullable=False)
     role = Column(String, default="user")
     subscription = Column(String, default="free")
-    remember_token = Column(String, nullable=True)   # ✅ new column
+    remember_token = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 class ActivityLog(Base):
