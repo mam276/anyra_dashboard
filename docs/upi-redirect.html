@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting to UPI...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const pa = params.get("pa");
+    const pn = params.get("pn");
+    const am = params.get("am");
+
+    const intent = `intent://upi/pay?pa=${pa}&pn=${pn}&am=${am}&cu=INR#Intent;scheme=upi;end;`;
+
+    window.location.href = intent;
+</script>
+
+<p>If you are not redirected automatically, please open your UPI app manually.</p>
+</body>
+</html>
