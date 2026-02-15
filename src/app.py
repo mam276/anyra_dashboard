@@ -13,6 +13,15 @@ from modules.donation import views as donation_views
 from modules.audit import views as audit_views
 from modules import crm 
 
+
+from utils.db import engine
+try:
+    with engine.connect() as conn:
+        st.write("✅ Database connection successful")
+except Exception as e:
+    st.write("❌ Database connection failed:", e)
+    
+
 def show_logo():
     """Safely display logo if available."""
     logo_path = os.path.join(os.path.dirname(__file__), "assets", "logo.png")
@@ -168,5 +177,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
