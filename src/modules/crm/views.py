@@ -1,8 +1,9 @@
 import streamlit as st
-from utils.audit import log_action
+from utils.audit import log_event
 
 CONTACTS = []
 LEADS = []
+
 
 def show_crm_dashboard():
     st.title("CRM Dashboard")
@@ -22,6 +23,7 @@ def show_crm_dashboard():
             company = st.text_input("Company")
             notes = st.text_area("Notes")
             submitted = st.form_submit_button("Add Contact")
+
             if submitted and name and email:
                 CONTACTS.append({
                     "name": name,
@@ -29,7 +31,11 @@ def show_crm_dashboard():
                     "company": company,
                     "notes": notes
                 })
-                log_action(st.session_state.get("user", "guest"), f"added_contact:{email}")
+
+                # Correct audit logging
+                user_email = st.session_state.get("user", {}).get("email", "guest")
+                log_event(user_email, "added_contact", f"email={email}")
+
                 st.success(f"Contact {name} added!")
 
         if CONTACTS:
@@ -54,6 +60,7 @@ def show_crm_dashboard():
             value = st.number_input("Deal Value ($)", min_value=0.0, step=100.0)
             notes = st.text_area("Notes")
             submitted = st.form_submit_button("Add Lead")
+
             if submitted and lead_name:
                 LEADS.append({
                     "lead_name": lead_name,
@@ -62,11 +69,18 @@ def show_crm_dashboard():
                     "value": value,
                     "notes": notes
                 })
-                log_action(st.session_state.get("user", "guest"), f"added_lead:{lead_name}")
+
+                # Correct audit logging
+                user_email = st.session_state.get("user", {}).get("email", "guest")
+                log_event(user_email, "added_lead", f"lead={lead_name}")
+
                 st.success(f"Lead {lead_name} added!")
 
         if LEADS:
             st.subheader("Pipeline Overview")
             for l in LEADS:
-                st.write(f"**{l['lead_name']}** ({l['company']}) - Stage: {l['stage']} - Value: ${l['value']}")
+                st.write(
+                    f"**{l['lead_name']}** ({l['company']}) - "
+                    f"Stage: {l['stage']} - Value: ${l['value']}"
+                )
                 st.caption(l["notes"])
