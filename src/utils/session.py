@@ -78,3 +78,12 @@ def logout_user():
     st.session_state.clear()
     if user:
         log_event(user.get("email"), "logout")
+
+def init_session():
+    """Initialize session state defaults."""
+    if "user" not in st.session_state:
+        st.session_state["user"] = None
+    if "remember_token" not in st.session_state:
+        st.session_state["remember_token"] = None
+        
+
