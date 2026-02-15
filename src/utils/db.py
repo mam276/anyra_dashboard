@@ -6,10 +6,16 @@ import datetime
 Base = declarative_base()
 
 # Load DB URL from Streamlit secrets
-DATABASE_URL = st.secrets["database"]["url"]
+DATABASE_URL = st.secrets["DATABASE_URL"]  # <-- SIMPLE, RELIABLE
 
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(bind=engine)
+# Create engine with SSL (required on Streamlit Cloud)
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={"sslmode": "require"},
+    pool_pre_ping=True
+)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 class User(Base):
     __tablename__ = "users"
