@@ -22,8 +22,8 @@ def show_donation():
 
     st.write("Choose your preferred donation method below.")
 
-    upi_id = "yourupi@upi"
-    name = "ANYRA"
+    upi_id = "nusratrabbilimited-2@okhdfcbank"
+    name = "Mohammed Ashraf Moin"
     amount = st.number_input("Donation Amount (INR)", min_value=1, step=1)
 
     # Base UPI link
@@ -67,3 +67,4 @@ def show_donation():
     log_event(user_email, "donation_view", f"amount={amount}")
 
     st.success("Donation options generated successfully.")
+
