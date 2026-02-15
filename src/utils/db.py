@@ -8,12 +8,19 @@ Base = declarative_base()
 # Load DB URL from Streamlit secrets
 DATABASE_URL = st.secrets["DATABASE_URL"]
 
+print("DATABASE_URL:", DATABASE_URL)
 # Create engine (Supabase requires SSL, already in URL)
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True
 )
 
+try:
+    with engine.connect() as conn:
+        print("DB CONNECTION SUCCESSFUL")
+except Exception as e:
+    print("DB CONNECTION FAILED:", e)
+    
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 class User(Base):
@@ -44,3 +51,4 @@ class Subscription(Base):
 
 # Ensure tables exist
 Base.metadata.create_all(engine)
+
