@@ -1,11 +1,13 @@
+import streamlit as st
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import sessionmaker, declarative_base
 import datetime
 
 Base = declarative_base()
 
-# Supabase connection string
-DATABASE_URL = "postgresql://postgres:svYzxlLD7y7DOJ7p@db.umsduupzfwkdkxluueuv.supabase.co:5432/postgres"
+# Load DB URL from Streamlit secrets
+DATABASE_URL = st.secrets["database"]["url"]
+
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 
@@ -35,8 +37,5 @@ class Subscription(Base):
     active = Column(Boolean, default=True)
     trial_end_date = Column(DateTime)
 
+# Ensure tables exist
 Base.metadata.create_all(engine)
-
-
-
-
