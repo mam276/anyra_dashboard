@@ -6,9 +6,9 @@ import datetime
 Base = declarative_base()
 
 # Load DB URL from Streamlit secrets
-DATABASE_URL = st.secrets["DATABASE_URL"]  # <-- SIMPLE, RELIABLE
+DATABASE_URL = st.secrets["DATABASE_URL"]
 
-# Create engine (Supabase already includes sslmode=require in URL)
+# Create engine (Supabase requires SSL, already in URL)
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True
