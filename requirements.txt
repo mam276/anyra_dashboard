@@ -8,5 +8,6 @@ apscheduler
 scikit-learn
 joblib
 qrcode
-
+psycopg2-binary
 pillow
+
