@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 
-# Correct imports, matching your project structure
+# Correct imports
 from utils.session import init_session
 from utils.scheduler import start_scheduler
 from utils.branding import show_branding
@@ -11,16 +11,20 @@ from modules.auth import views as auth_views
 from modules.onboarding import views as onboarding_views
 from modules.donation import views as donation_views
 from modules.audit import views as audit_views
-from modules import crm 
-
+from modules import crm
 
 from utils.db import engine
+
+
+# ---------------------------
+#  Optional DB Connection Test
+# ---------------------------
 try:
     with engine.connect() as conn:
         st.write("✅ Database connection successful")
 except Exception as e:
     st.write("❌ Database connection failed:", e)
-    
+
 
 def show_logo():
     """Safely display logo if available."""
@@ -29,6 +33,7 @@ def show_logo():
         st.image(logo_path, width=150)
     else:
         st.warning("Logo not found at expected path: " + logo_path)
+
 
 def main():
     # Initialize session and scheduler
@@ -46,29 +51,27 @@ def main():
     if page == "reset" and "token" in params:
         token = params["token"][0]
         auth_views.show_reset_form(token)
-        return  # stop here after reset form
+        return
 
     # -------- Authentication Gate --------
     if st.session_state.get("user") is None:
-        # Initialize welcome flag
+
         if "show_welcome" not in st.session_state:
             st.session_state["show_welcome"] = True
 
         if st.session_state["show_welcome"]:
-            # Show welcome screen first
             show_logo()
             st.title("Welcome to Anyra Dashboard 👋")
             st.write("Explore insights tailored to your data — sign up or log in to continue.")
 
             if st.button("Continue"):
                 st.session_state["show_welcome"] = False
-            return  # stop here after welcome screen
+            return
 
-        # Unified login/signup/forgot password screen (tabs)
         auth_views.show_auth()
-        return  # stop here until user logs in
+        return
 
-    # -------- Onboarding Flows (only after login) --------
+    # -------- Onboarding Flows --------
     onboarding_views.show_welcome_popup()
     onboarding_views.show_rotating_tips()
     onboarding_views.start_guided_tour()
@@ -76,18 +79,14 @@ def main():
     # -------- Sidebar Navigation --------
     st.sidebar.title("Navigation")
 
-    # Show logged-in user info with role/subscription badges
     user_info = st.session_state.get("user")
     if user_info:
-        if isinstance(user_info, dict):
-            email = user_info.get("email", "Unknown")
-            role = user_info.get("role", "user")
-            subscription = user_info.get("subscription", "free")
-            st.sidebar.write(f"**Logged in as:** {email}")
-            st.sidebar.write(f"**Role:** {role}")
-            st.sidebar.write(f"**Subscription:** {subscription}")
-        else:
-            st.sidebar.write(f"**Logged in as:** {user_info}")
+        email = user_info.get("email", "Unknown")
+        role = user_info.get("role", "user")
+        subscription = user_info.get("subscription", "free")
+        st.sidebar.write(f"**Logged in as:** {email}")
+        st.sidebar.write(f"**Role:** {role}")
+        st.sidebar.write(f"**Subscription:** {subscription}")
 
     menu = st.sidebar.radio(
         "Navigation",
@@ -103,7 +102,6 @@ def main():
         if auth_choice == "Login/Signup":
             auth_views.show_auth()
         elif auth_choice == "Logout":
-            # Clear session and rerun
             st.session_state.clear()
             st.success("You have been logged out.")
             st.rerun()
@@ -164,10 +162,7 @@ def main():
             st.error("CRM is available only to premium users or admin role.")
 
     elif menu == "Donation":
-        if st.session_state.get("user"):
-            donation_views.show_donation()
-        else:
-            st.error("You must be logged in to access donations.")
+        donation_views.show_donation()
 
     elif menu == "Audit":
         if enforce_role("admin"):
@@ -175,8 +170,6 @@ def main():
         else:
             st.error("You do not have permission to view audit logs.")
 
+
 if __name__ == "__main__":
     main()
-
-
-
