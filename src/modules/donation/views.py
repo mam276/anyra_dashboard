@@ -41,20 +41,11 @@ def show_donation():
     # ---------------------------------------------------------
     # WORKING MOBILE UPI INTENT LINKS (Google Pay, PhonePe, Paytm)
     # ---------------------------------------------------------
-    gpay_intent = (
-        f"intent://upi/pay?pa={upi_id}&pn={name}&am={amount}&cu=INR"
-        "#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end;"
-    )
+    redirect_base = "https://mam276.github.io/anyra_dashboard/upi-redirect.html"
 
-    phonepe_intent = (
-        f"intent://upi/pay?pa={upi_id}&pn={name}&am={amount}&cu=INR"
-        "#Intent;scheme=upi;package=com.phonepe.app;end;"
-    )
-
-    paytm_intent = (
-        f"intent://upi/pay?pa={upi_id}&pn={name}&am={amount}&cu=INR"
-        "#Intent;scheme=upi;package=net.one97.paytm;end;"
-    )
+    gpay_link = f"{redirect_base}?pa={upi_id}&pn={name}&am={amount}"
+    phonepe_link = gpay_link
+    paytm_link = gpay_link
 
     # ---------------------------------------------------------
     # Razorpay Global Payment Link
@@ -137,4 +128,5 @@ def show_donation():
     log_event(user_email, "donation_view", f"amount={amount}")
 
     st.success("Donation options generated successfully.")
+
 
