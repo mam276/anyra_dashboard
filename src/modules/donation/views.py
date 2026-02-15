@@ -75,12 +75,39 @@ def show_donation():
     st.write("If you're on a mobile device, tap one of the buttons below:")
 
     col1, col2, col3 = st.columns(3)
+
     with col1:
-        st.markdown(f"[Google Pay]({gpay_intent})")
+        st.markdown(
+        f"""
+        <a href="javascript:window.location='{gpay_intent}';" 
+           style="font-size:16px; font-weight:600;">
+           Google Pay
+        </a>
+        """,
+        unsafe_allow_html=True
+        )
+
     with col2:
-        st.markdown(f"[PhonePe]({phonepe_intent})")
+        st.markdown(
+        f"""
+        <a href="javascript:window.location='{phonepe_intent}';" 
+           style="font-size:16px; font-weight:600;">
+           PhonePe
+        </a>
+        """,
+        unsafe_allow_html=True
+        )
+
     with col3:
-        st.markdown(f"[Paytm]({paytm_intent})")
+        st.markdown(
+        f"""
+        <a href="javascript:window.location='{paytm_intent}';" 
+           style="font-size:16px; font-weight:600;">
+           Paytm
+        </a>
+        """,
+        unsafe_allow_html=True
+        )
 
     st.divider()
 
@@ -110,3 +137,4 @@ def show_donation():
     log_event(user_email, "donation_view", f"amount={amount}")
 
     st.success("Donation options generated successfully.")
+
